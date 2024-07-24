@@ -1,0 +1,18 @@
+<h2 *ngIf="client.id">Edit Client</h2>
+<h2 *ngIf="!client.id">Add New Client</h2>
+<form (ngSubmit)="saveClient()">
+  <div>
+    <label>Name:</label>
+    <input [(ngModel)]="client.name" name="name" required />
+  </div>
+  <div>
+    <label>Phone</label>
+    <input [(ngModel)]="client.phone" name="phone" required />
+  </div>
+  <div>
+    <label>Notes:</label>
+    <textarea [(ngModel)]="client.notes" name="notes"></textarea>
+  </div>
+  <button type="submit">Save</button>
+  <button type="button" (click)="cancel()">Cancel</button>
+</form>
