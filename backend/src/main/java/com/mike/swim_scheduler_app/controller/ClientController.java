@@ -16,8 +16,12 @@ public class ClientController {
     private ClientService clientService;
 
     @GetMapping
-    public List<Client> listClients() {
-        return clientService.findAll();
+    public ResponseEntity<List<Client>> listClients() {
+        List<Client> clients = clientService.findAll();
+        if (clients.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(clients);
     }
 
     @GetMapping("/{id}")
@@ -35,14 +39,22 @@ public class ClientController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Client> updateClient(@PathVariable Long id, @RequestBody Client client) {
-        client.setId(id);
-        Client updatedClient = clientService.save(client);
-        return ResponseEntity.ok().body(updatedClient);
+        return clientService.findById(id)
+                .map(existingClient -> {
+                    client.setId(id);
+                    Client updatedClient = clientService.save(client);
+                    return ResponseEntity.ok().body(updatedClient);
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteClient(@PathVariable Long id) {
-        clientService.deleteById(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteClient(@PathVariable Long id) {
+        return clientService.findById(id)
+                .map(client -> {
+                    clientService.deleteById(id);
+                    return ResponseEntity.noContent().build();
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }
