@@ -1,1 +1,37 @@
-<p>calendar works!</p>
+<div class="calendar-container">
+  <h2 class="calendar-header">{{ currentMonth | date : "MMMM yyyy" }}</h2>
+  <table class="calendar-table">
+    <thead>
+      <tr>
+        <th>Sun</th>
+        <th>Mon</th>
+        <th>Tue</th>
+        <th>Wed</th>
+        <th>Thu</th>
+        <th>Fri</th>
+        <th>Sat</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let week of generateCalendar()">
+        <td
+          *ngFor="let day of week"
+          [ngClass]="{
+            'current-day': day && isCurrentDay(day),
+            workday: day && getWorkdayForDate(day)
+          }"
+        >
+          <div *ngIf="day">
+            <span>{{ day.getDate() }}</span>
+            <div *ngIf="getWorkdayForDate(day)">
+              <p>Start: {{ getWorkdayForDate(day)?.startTime }}</p>
+              <p>End: {{ getWorkdayForDate(day)?.endTime }}</p>
+              <p>Lessons: {{ getWorkdayForDate(day)?.lessons?.length }}</p>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+>
