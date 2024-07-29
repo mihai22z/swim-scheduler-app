@@ -1,5 +1,9 @@
 package com.mike.swim_scheduler_app.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -7,6 +11,9 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+//@JsonIdentityInfo(
+//        generator = ObjectIdGenerators.PropertyGenerator.class,
+//        property = "id")
 @Entity
 public class Workday {
     @Id
@@ -16,7 +23,9 @@ public class Workday {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    @OneToMany(mappedBy = "workday", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "workday", cascade = CascadeType.MERGE)
+    @JsonManagedReference
+    @OrderBy("startTime ASC")
     private Set<Lesson> lessons = new HashSet<>();
 
     public Long getId() {

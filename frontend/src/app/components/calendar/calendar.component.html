@@ -23,9 +23,12 @@
         >
           <div *ngIf="day">
             <span>{{ day.getDate() }}</span>
-            <div *ngIf="getWorkdayForDate(day)">
-              <p>Start: {{ getWorkdayForDate(day)?.startTime }}</p>
-              <p>End: {{ getWorkdayForDate(day)?.endTime }}</p>
+            <div
+              *ngIf="getWorkdayForDate(day)"
+              (click)="viewDayDetails(getWorkdayForDate(day)?.id!)"
+            >
+              <p>Start: {{ formatDate(getWorkdayForDate(day)?.startTime) }}</p>
+              <p>End: {{ formatDate(getWorkdayForDate(day)?.endTime) }}</p>
               <p>Lessons: {{ getWorkdayForDate(day)?.lessons?.length }}</p>
             </div>
           </div>

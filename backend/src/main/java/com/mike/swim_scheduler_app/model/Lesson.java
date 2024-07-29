@@ -1,10 +1,12 @@
 package com.mike.swim_scheduler_app.model;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+
 
 @Entity
 public class Lesson {
@@ -14,16 +16,12 @@ public class Lesson {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    @ManyToMany
-    @JoinTable(
-            name = "lesson_client",
-            joinColumns = @JoinColumn(name = "lesson_id"),
-            inverseJoinColumns = @JoinColumn(name = "client_id")
-    )
-    private Set<Client> clients = new HashSet<>();
+    @OneToMany(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ClientLesson> clientLessons = new HashSet<>();
 
     @ManyToOne
     @JoinColumn(name = "workday_id")
+    @JsonBackReference
     private Workday workday;
 
     public Long getId() {
@@ -50,12 +48,12 @@ public class Lesson {
         this.endTime = endTime;
     }
 
-    public Set<Client> getClients() {
-        return clients;
+    public Set<ClientLesson> getClientLessons() {
+        return clientLessons;
     }
 
-    public void setClients(Set<Client> clients) {
-        this.clients = clients;
+    public void setClientLessons(Set<ClientLesson> clientLessons) {
+        this.clientLessons = clientLessons;
     }
 
     public Workday getWorkday() {

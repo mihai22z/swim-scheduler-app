@@ -14,7 +14,13 @@ import { Client } from '../../models/client';
   styleUrl: './client-form.component.css',
 })
 export class ClientFormComponent implements OnInit {
-  client: Client = { id: null, name: '', phone: '', notes: '' };
+  client: Client = {
+    id: null,
+    name: '',
+    phone: '',
+    notes: '',
+    clientLessons: [],
+  };
 
   constructor(
     private clientService: ClientService,

@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { WorkdayService } from '../../services/workday.service';
 import { Workday } from '../../models/workday';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-calendar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DatePipe],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css',
 })
@@ -14,10 +15,14 @@ export class CalendarComponent implements OnInit {
   currentMonth: Date = new Date();
   workdays: Workday[] = [];
 
-  constructor(private workdayService: WorkdayService) {}
+  constructor(
+    private workdayService: WorkdayService,
+    private router: Router,
+    private datePipe: DatePipe
+  ) {}
 
   ngOnInit(): void {
-    this.loadMockWorkdays();
+    this.loadWorkdays();
   }
 
   loadWorkdays(): void {
@@ -33,6 +38,13 @@ export class CalendarComponent implements OnInit {
         date: '2024-07-26',
         startTime: '09:00',
         endTime: '17:00',
+        lessons: [],
+      },
+      {
+        id: 2,
+        date: '2024-07-25',
+        startTime: '10:00',
+        endTime: '13:00',
         lessons: [],
       },
     ];
@@ -92,5 +104,15 @@ export class CalendarComponent implements OnInit {
 
   isCurrentDay(day: Date): boolean {
     return day.toDateString() === new Date().toDateString();
+  }
+
+  viewDayDetails(workdayId: number | undefined): void {
+    if (workdayId !== undefined) {
+      this.router.navigate(['/worday', workdayId]);
+    }
+  }
+
+  formatDate(date: string | undefined): string {
+    return this.datePipe.transform(date, 'HH:mm')!;
   }
 }

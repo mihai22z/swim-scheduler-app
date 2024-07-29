@@ -1,0 +1,13 @@
+<div *ngIf="workday">
+  <h2>Workday Details for {{ workday.date }}</h2>
+  <p><strong>Start Time:</strong> {{ formatDate(workday.startTime) }}</p>
+  <p><strong>End Time:</strong> {{ formatDate(workday.endTime) }}</p>
+  <p><strong>Lessons:</strong></p>
+  <ul>
+    <li *ngFor="let lesson of workday.lessons">
+      {{ formatDate(lesson.startTime) }} - {{ formatDate(lesson.endTime) }} with
+      clients:
+      {{ getClientNames(lesson) }}
+    </li>
+  </ul>
+</div>

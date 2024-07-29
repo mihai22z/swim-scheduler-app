@@ -1,8 +1,13 @@
 package com.mike.swim_scheduler_app.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
+
 
 @Entity
 public class Client {
@@ -13,8 +18,8 @@ public class Client {
     private String phone;
     private String notes;
 
-    @ManyToMany(mappedBy = "clients")
-    private Set<Lesson> lessons = new HashSet<>();
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<ClientLesson> clientLessons = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -48,11 +53,11 @@ public class Client {
         this.notes = notes;
     }
 
-    public Set<Lesson> getLessons() {
-        return lessons;
+    public Set<ClientLesson> getClientLessons() {
+        return clientLessons;
     }
 
-    public void setLessons(Set<Lesson> lessons) {
-        this.lessons = lessons;
+    public void setClientLessons(Set<ClientLesson> clientLessons) {
+        this.clientLessons = clientLessons;
     }
 }
