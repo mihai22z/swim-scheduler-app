@@ -18,10 +18,14 @@
           *ngFor="let day of week"
           [ngClass]="{
             'current-day': day && isCurrentDay(day),
-            workday: day && getWorkdayForDate(day)
+            workday: day && getWorkdayForDate(day),
+            anyday: day && !isCurrentDay(day) && !getWorkdayForDate(day)
           }"
         >
-          <div *ngIf="day">
+          <div
+            *ngIf="day"
+            [ngClass]="{ 'day-container': day && getWorkdayForDate }"
+          >
             <span>{{ day.getDate() }}</span>
             <div
               *ngIf="getWorkdayForDate(day)"

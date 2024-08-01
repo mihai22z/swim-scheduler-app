@@ -1,0 +1,18 @@
+<h2 mat-dialog-title>Edit Clients</h2>
+<mat-dialog-content>
+  <mat-list>
+    <mat-list-item *ngFor="let client of clients">
+      <div matLine>
+        <span>{{ client.name }} ({{ client.phone }})</span>
+        <button mat-button color="warn" (click)="removeClient(client)">
+          Remove
+        </button>
+      </div>
+    </mat-list-item>
+  </mat-list>
+  <button mat-button color="primary" (click)="addClient()">Add Client</button>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-button [mat-dialog-close]="true">Save</button>
+</mat-dialog-actions>

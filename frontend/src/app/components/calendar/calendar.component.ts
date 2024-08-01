@@ -108,7 +108,7 @@ export class CalendarComponent implements OnInit {
 
   viewDayDetails(workdayId: number | undefined): void {
     if (workdayId !== undefined) {
-      this.router.navigate(['/worday', workdayId]);
+      this.router.navigate(['/workday', workdayId]);
     }
   }
 

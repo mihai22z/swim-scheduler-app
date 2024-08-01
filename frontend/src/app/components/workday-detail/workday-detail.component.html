@@ -1,13 +1,57 @@
 <div *ngIf="workday">
-  <h2>Workday Details for {{ workday.date }}</h2>
-  <p><strong>Start Time:</strong> {{ formatDate(workday.startTime) }}</p>
-  <p><strong>End Time:</strong> {{ formatDate(workday.endTime) }}</p>
-  <p><strong>Lessons:</strong></p>
-  <ul>
-    <li *ngFor="let lesson of workday.lessons">
-      {{ formatDate(lesson.startTime) }} - {{ formatDate(lesson.endTime) }} with
-      clients:
-      {{ getClientNames(lesson) }}
-    </li>
-  </ul>
+  <h2 class="mat-headline">
+    Workday Details for {{ workday.date | date : "fullDate" }}
+  </h2>
+  <mat-card class="custom">
+    <mat-card-header>
+      <mat-card-title>Lessons</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-accordion>
+        <mat-expansion-panel *ngFor="let lesson of workday.lessons">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{ lesson.startTime | date : "shortTime" }} -
+              {{ lesson.endTime | date : "shortTime" }}
+            </mat-panel-title>
+            <mat-panel-description>
+              Clients: {{ lesson.clientLessons.length }}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <mat-list>
+            <mat-list-item *ngFor="let clientLesson of lesson.clientLessons">
+              <h4 matLine>
+                {{ clientLesson.client?.name }} ({{
+                  clientLesson.client?.phone
+                }})
+              </h4>
+              <p matLine *ngIf="clientLesson.client?.notes">
+                {{ clientLesson.client?.notes }}
+              </p>
+            </mat-list-item>
+          </mat-list>
+
+          <mat-action-row>
+            <button mat-button color="primary" (click)="editClients(lesson.id)">
+              Edit Clients
+            </button>
+            <button
+              mat-button
+              color="accent"
+              (click)="rescheduleLesson(lesson.id)"
+            >
+              Reschedule
+            </button>
+            <button mat-button color="warn" (click)="removeLesson(lesson.id)">
+              Remove
+            </button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div *ngIf="!workday">
+  <p>Loading workday details...</p>
 </div>

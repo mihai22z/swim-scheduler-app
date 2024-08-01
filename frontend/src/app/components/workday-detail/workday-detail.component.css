@@ -1,0 +1,87 @@
+body {
+  background-color: #f0f0f0;
+  font-family: "Roboto", sans-serif;
+  color: #333;
+}
+
+mat-card {
+  background-color: #515667;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 20px;
+  padding: 20px;
+}
+
+mat-card-header {
+  background-color: #383f57;
+  color: #ffffff;
+  border-radius: 8px 8px 0 0;
+  padding: 10px;
+}
+
+mat-card-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+}
+
+mat-card-content {
+  background-color: #515667;
+  padding: 20px;
+}
+
+.mat-accordion .mat-expansion-panel {
+  background-color: #383f57;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.mat-expansion-panel-header {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.mat-list-item {
+  height: auto !important;
+  padding: 10px 0;
+}
+
+.mat-list-item h4 {
+  font-weight: bold;
+  margin: 0;
+}
+
+.mat-list-item p {
+  margin: 0;
+}
+
+.mat-action-row {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 0;
+}
+
+.mat-button {
+  margin-left: 10px;
+}
+
+.mat-button.mat-primary {
+  color: #6200ea;
+}
+
+.mat-button.mat-accent {
+  color: #03dac5;
+}
+
+.mat-button.mat-warn {
+  color: #b00020;
+}
+
+h2.mat-headline {
+  font-size: 2rem;
+  font-weight: 500;
+  color: #a6a563;
+  margin: 20px;
+  text-align: center;
+}

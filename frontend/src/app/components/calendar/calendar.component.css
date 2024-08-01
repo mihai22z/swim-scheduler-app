@@ -5,13 +5,13 @@ table {
 }
 
 thead th {
-  background-color: #4caf50;
+  background-color: #a6a563;
   color: white;
   padding: 10px;
 }
 
 tbody td {
-  border: 1px solid #ddd;
+  border: 1px solid #515667;
   padding: 10px;
   text-align: center;
   vertical-align: top;
@@ -36,7 +36,7 @@ tbody td div p {
 }
 
 button {
-  backfround-color: #4caf50;
+  background-color: #4caf50;
   border: none;
   color: white;
   padding: 5px 10px;
@@ -54,17 +54,28 @@ button:hover {
 }
 
 .current-day {
-  background-color: #f2f2f2;
+  background-color: #324481;
   border: 2px solid #4caf50;
 }
 
 .workday {
-  background-color: #e3f2fd;
+  background-color: #527e9e;
 }
 
 .workday:hover {
-  background-color: #cde9fd;
+  background-color: #6e98b6;
   cursor: pointer;
+}
+
+.anyday {
+  background-color: #383f57;
+}
+
+.day-container {
+  display: block;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .current-day.workday {
@@ -80,6 +91,7 @@ button:hover {
 }
 
 .calendar-header {
+  color: #a6a563;
   font-size: 24px;
   margin-bottom: 10px;
 }
