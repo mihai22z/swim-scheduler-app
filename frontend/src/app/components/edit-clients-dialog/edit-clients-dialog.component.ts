@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Client } from '../../models/client';
 import { ClientService } from '../../services/client.service';
 import { LessonService } from '../../services/lesson.service';
+import { Lesson } from '../../models/lesson';
 
 @Component({
   selector: 'app-edit-clients-dialog',
@@ -26,8 +27,7 @@ import { LessonService } from '../../services/lesson.service';
   styleUrl: './edit-clients-dialog.component.css',
 })
 export class EditClientsDialogComponent implements OnInit {
-  clients: Client[] = [];
-  lessonId: number;
+  lesson: Lesson;
 
   constructor(
     public dialogRef: MatDialogRef<EditClientsDialogComponent>,
@@ -35,23 +35,13 @@ export class EditClientsDialogComponent implements OnInit {
     private clientService: ClientService,
     private lessonService: LessonService
   ) {
-    this.lessonId = data.lessonId;
+    this.lesson = data.lesson;
   }
 
-  ngOnInit(): void {
-    this.loadClients();
-  }
-
-  loadClients(): void {
-    this.lessonService.getLessonById(this.lessonId).subscribe((lesson) => {
-      this.clients = lesson.clientLessons.map(
-        (clientLesson) => clientLesson.client!
-      );
-    });
-  }
+  ngOnInit(): void {}
 
   removeClient(client: Client): void {
-    this.clients = this.clients.filter((c) => c.id !== client.id);
+    this.lesson.clients = this.lesson.clients.filter((c) => c.id !== client.id);
   }
 
   addClient(): void {}

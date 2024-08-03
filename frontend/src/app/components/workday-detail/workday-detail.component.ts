@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { WorkdayService } from '../../services/workday.service';
 import { ClientService } from '../../services/client.service';
+import { LessonService } from '../../services/lesson.service';
 import { Workday } from '../../models/workday';
 import { CommonModule } from '@angular/common';
 import { Lesson } from '../../models/lesson';
@@ -39,6 +40,7 @@ export class WorkdayDetailComponent {
     private route: ActivatedRoute,
     private workdayService: WorkdayService,
     private clientService: ClientService,
+    private lessonService: LessonService,
     private datePipe: DatePipe,
     public dialog: MatDialog
   ) {}
@@ -58,24 +60,16 @@ export class WorkdayDetailComponent {
   loadClientData(): void {
     if (!this.workday) return;
 
-    const clientRequests = this.workday.lessons.flatMap((lesson) =>
-      lesson.clientLessons.map((clientLesson) =>
-        this.clientService.getClientById(clientLesson.id.clientId)
-      )
-    );
-
-    forkJoin(clientRequests).subscribe((clients) => {
-      this.workday?.lessons.forEach((lesson) => {
-        lesson.clientLessons.forEach((clientLesson) => {
-          const client = clients.find(
-            (client) => client.id === clientLesson.id.clientId
-          );
-          if (client) {
-            clientLesson.client = client;
-          }
-        });
-      });
-    });
+    for (var lesson of this.workday.lessons) {
+      if (lesson.id) {
+        this.lessonService
+          .getClientsForLesson(lesson.id)
+          .subscribe((clients) => {
+            lesson.clients = clients;
+            console.log(`Lesson ${lesson.id} clients:`, lesson.clients);
+          });
+      }
+    }
   }
 
   getClientNames(lesson: Lesson): String {
@@ -88,10 +82,10 @@ export class WorkdayDetailComponent {
     return this.datePipe.transform(date, 'HH:mm')!;
   }
 
-  editClients(lessonId: number | null): void {
+  editClients(lesson: Lesson): void {
     const dialogRef = this.dialog.open(EditClientsDialogComponent, {
       width: '400px',
-      data: { lessonId },
+      data: { lesson },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

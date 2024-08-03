@@ -11,29 +11,25 @@
         <mat-expansion-panel *ngFor="let lesson of workday.lessons">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              {{ lesson.startTime | date : "shortTime" }} -
-              {{ lesson.endTime | date : "shortTime" }}
+              {{ formatDate(lesson.startTime) }} -
+              {{ formatDate(lesson.endTime) }}
             </mat-panel-title>
             <mat-panel-description>
-              Clients: {{ lesson.clientLessons.length }}
+              Clients: {{ lesson.clients?.length }}
             </mat-panel-description>
           </mat-expansion-panel-header>
 
           <mat-list>
-            <mat-list-item *ngFor="let clientLesson of lesson.clientLessons">
-              <h4 matLine>
-                {{ clientLesson.client?.name }} ({{
-                  clientLesson.client?.phone
-                }})
-              </h4>
-              <p matLine *ngIf="clientLesson.client?.notes">
-                {{ clientLesson.client?.notes }}
+            <mat-list-item *ngFor="let client of lesson.clients">
+              <h4 matLine>{{ client.name }} ({{ client.phone }})</h4>
+              <p matLine *ngIf="client.notes">
+                {{ client.notes }}
               </p>
             </mat-list-item>
           </mat-list>
 
           <mat-action-row>
-            <button mat-button color="primary" (click)="editClients(lesson.id)">
+            <button mat-button color="primary" (click)="editClients(lesson)">
               Edit Clients
             </button>
             <button

@@ -1,0 +1,22 @@
+<mat-sidenav-container class="container">
+  <mat-sidenav #sidenav class="sidenav" mode="side" opened>
+    <mat-toolbar class="sidenav-header">
+      <h1>Swim Scheduler</h1>
+    </mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item routerLink="/calendar">Calendar</a>
+      <a mat-list-item routerLink="/clients">Clients</a>
+      <a mat-list-item routerLink="/add-lesson">Add Lesson</a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="title">Swim Scheduler</span>
+    </mat-toolbar>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

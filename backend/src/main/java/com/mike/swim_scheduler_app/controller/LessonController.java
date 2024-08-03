@@ -1,6 +1,8 @@
 package com.mike.swim_scheduler_app.controller;
 
+import com.mike.swim_scheduler_app.model.Client;
 import com.mike.swim_scheduler_app.model.Lesson;
+import com.mike.swim_scheduler_app.service.ClientLessonService;
 import com.mike.swim_scheduler_app.service.LessonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,8 @@ import java.util.List;
 public class LessonController {
     @Autowired
     private LessonService lessonService;
+    @Autowired
+    private ClientLessonService clientLessonService;
 
     @GetMapping
     public ResponseEntity<List<Lesson>> listLessons() {
@@ -29,6 +33,15 @@ public class LessonController {
         return lessonService.findById(id)
                 .map(lesson -> ResponseEntity.ok().body(lesson))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{lessonId}/clients")
+    public ResponseEntity<List<Client>> getLessonClients(@PathVariable Long lessonId) {
+        List<Client> clients = clientLessonService.findClientsForLesson(lessonId);
+        if (clients.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(clients);
     }
 
     @PostMapping

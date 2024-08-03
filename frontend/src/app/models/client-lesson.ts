@@ -6,6 +6,6 @@ export interface ClientLesson {
     clientId: number;
     lessonId: number;
   };
-  client: Client;
-  lesson: Lesson;
+  client?: Client;
+  lesson?: Lesson;
 }

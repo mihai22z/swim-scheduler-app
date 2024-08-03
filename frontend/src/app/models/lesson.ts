@@ -1,3 +1,4 @@
+import { Client } from './client';
 import { ClientLesson } from './client-lesson';
 
 export interface Lesson {
@@ -6,4 +7,5 @@ export interface Lesson {
   endTime: string;
   workdayId: number;
   clientLessons: ClientLesson[];
+  clients: Client[];
 }

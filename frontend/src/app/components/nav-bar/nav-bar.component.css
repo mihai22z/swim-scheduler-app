@@ -1,0 +1,48 @@
+.container {
+  height: 100%;
+}
+
+.sidenav {
+  width: 200px;
+  background-color: #2e3b4e;
+  color: white;
+  padding-top: 64px;
+}
+
+.sidenav-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  font-size: 24px;
+  padding-left: 16px;
+}
+
+.mat-nav-list a {
+  padding-left: 20px;
+}
+
+mat-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background-color: #1c2938;
+  color: white;
+}
+
+.title {
+  padding-left: 16px;
+  font-size: 20px;
+}
+
+.content {
+  padding: 80px 20px 20px 20px;
+  background-color: #f4f5f7;
+  min-height: 100vh;
+}
+
+.mat-icon-button {
+  color: white;
+}
