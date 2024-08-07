@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, map } from 'rxjs';
 import { Lesson } from '../models/lesson';
 import { Client } from '../models/client';
 
@@ -10,6 +10,9 @@ const API_URL = 'http://localhost:8080/api/lessons';
   providedIn: 'root',
 })
 export class LessonService {
+  private clientsSubject = new BehaviorSubject<Client[]>([]);
+  public clients$ = this.clientsSubject.asObservable();
+
   constructor(private http: HttpClient) {}
 
   getLessons(): Observable<Lesson[]> {
@@ -21,6 +24,11 @@ export class LessonService {
   }
 
   getClientsForLesson(lessonId: number): Observable<Client[]> {
-    return this.http.get<Client[]>(`${API_URL}/${lessonId}/clients`);
+    return this.http.get<Client[]>(`${API_URL}/${lessonId}/clients`).pipe(
+      map((clients) => {
+        this.clientsSubject.next(clients);
+        return clients;
+      })
+    );
   }
 }

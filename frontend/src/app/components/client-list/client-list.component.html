@@ -1,29 +1,54 @@
 <div>
-  <h2>Clients</h2>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Phone</th>
-        <th>Notes</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let client of clients">
-        <td>{{ client.name }}</td>
-        <td>{{ client.phone }}</td>
-        <td>{{ client.notes }}</td>
-        <td>
-          <button *ngIf="client.id !== null" (click)="editClient(client.id)">
+  <h2 class="mat-headline">Clients</h2>
+  <mat-card>
+    <table mat-table [dataSource]="clients" class="mat-elevation-z8">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let client">{{ client.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="phone">
+        <th mat-header-cell *matHeaderCellDef>Phone</th>
+        <td mat-cell *matCellDef="let client">{{ client.phone }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="notes">
+        <th mat-header-cell *matHeaderCellDef>Notes</th>
+        <td mat-cell *matCellDef="let client">{{ client.notes }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let client">
+          <button
+            mat-button
+            color="primary"
+            *ngIf="client.id !== null"
+            (click)="editClient(client.id)"
+          >
             Edit
           </button>
-          <button *ngIf="client.id !== null" (click)="deleteClient(client.id)">
+          <button
+            mat-button
+            color="warn"
+            *ngIf="client.id !== null"
+            (click)="deleteClient(client.id)"
+          >
             Delete
           </button>
         </td>
-      </tr>
-    </tbody>
-  </table>
-  <button (click)="router.navigate(['/clients/new'])">Add New Client</button>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    </table>
+  </mat-card>
+  <button
+    mat-fab
+    color="primary"
+    (click)="router.navigate(['/clients/new'])"
+    class="add-client-button"
+  >
+    <mat-icon>add</mat-icon>
+  </button>
 </div>

@@ -20,7 +20,10 @@
           </mat-expansion-panel-header>
 
           <mat-list>
-            <mat-list-item *ngFor="let client of lesson.clients">
+            <mat-list-item
+              *ngFor="let client of lesson.clients"
+              class="client-list-item"
+            >
               <h4 matLine>{{ client.name }} ({{ client.phone }})</h4>
               <p matLine *ngIf="client.notes">
                 {{ client.notes }}

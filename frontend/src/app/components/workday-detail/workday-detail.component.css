@@ -31,12 +31,13 @@ mat-card-content {
 
 .mat-accordion .mat-expansion-panel {
   background-color: #383f57;
-  margin-bottom: 10px;
+  margin-bottom: 16px;
   border: 1px solid #ddd;
   border-radius: 8px;
 }
 
 .mat-expansion-panel-header {
+  background-color: #1e2a38;
   font-size: 1rem;
   font-weight: 500;
   color: #333;
@@ -50,10 +51,12 @@ mat-card-content {
 .mat-list-item h4 {
   font-weight: bold;
   margin: 0;
+  padding-bottom: 5px;
 }
 
 .mat-list-item p {
   margin: 0;
+  padding-top: 5px;
 }
 
 .mat-action-row {
@@ -84,4 +87,15 @@ h2.mat-headline {
   color: #a6a563;
   margin: 20px;
   text-align: center;
+}
+
+.client-list-item {
+  padding: 16px;
+  margin: 0;
+  height: auto;
+  border-bottom: 1px solid #ccc;
+}
+
+.client-list-item:last-child {
+  border-bottom: none;
 }

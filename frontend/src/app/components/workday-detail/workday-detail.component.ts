@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { WorkdayService } from '../../services/workday.service';
 import { ClientService } from '../../services/client.service';
@@ -7,7 +12,6 @@ import { Workday } from '../../models/workday';
 import { CommonModule } from '@angular/common';
 import { Lesson } from '../../models/lesson';
 import { DatePipe } from '@angular/common';
-import { forkJoin } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatListModule } from '@angular/material/list';
@@ -15,6 +19,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
+import { MatLineModule } from '@angular/material/core';
 import { EditClientsDialogComponent } from '../edit-clients-dialog/edit-clients-dialog.component';
 
 @Component({
@@ -29,17 +34,18 @@ import { EditClientsDialogComponent } from '../edit-clients-dialog/edit-clients-
     MatExpansionModule,
     MatToolbarModule,
     MatIconModule,
+    MatLineModule,
   ],
   templateUrl: './workday-detail.component.html',
   styleUrl: './workday-detail.component.css',
 })
 export class WorkdayDetailComponent {
   workday: Workday | undefined;
+  clientsLoaded: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private workdayService: WorkdayService,
-    private clientService: ClientService,
     private lessonService: LessonService,
     private datePipe: DatePipe,
     public dialog: MatDialog
@@ -60,13 +66,12 @@ export class WorkdayDetailComponent {
   loadClientData(): void {
     if (!this.workday) return;
 
-    for (var lesson of this.workday.lessons) {
+    for (let lesson of this.workday.lessons) {
       if (lesson.id) {
         this.lessonService
           .getClientsForLesson(lesson.id)
           .subscribe((clients) => {
             lesson.clients = clients;
-            console.log(`Lesson ${lesson.id} clients:`, lesson.clients);
           });
       }
     }

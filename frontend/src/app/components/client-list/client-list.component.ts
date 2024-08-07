@@ -4,16 +4,28 @@ import { HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ClientService } from '../../services/client.service';
 import { Client } from '../../models/client';
+import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-client-list',
   standalone: true,
-  imports: [CommonModule, HttpClientModule],
+  imports: [
+    CommonModule,
+    HttpClientModule,
+    MatTableModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+  ],
   templateUrl: './client-list.component.html',
   styleUrl: './client-list.component.css',
 })
 export class ClientListComponent implements OnInit {
   clients: Client[] = [];
+  displayedColumns: string[] = ['name', 'phone', 'notes', 'actions'];
 
   constructor(private clientService: ClientService, public router: Router) {}
 

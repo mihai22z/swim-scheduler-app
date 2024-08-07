@@ -1,18 +1,24 @@
-<h2 *ngIf="client.id">Edit Client</h2>
-<h2 *ngIf="!client.id">Add New Client</h2>
-<form (ngSubmit)="saveClient()">
-  <div>
-    <label>Name:</label>
-    <input [(ngModel)]="client.name" name="name" required />
-  </div>
-  <div>
-    <label>Phone</label>
-    <input [(ngModel)]="client.phone" name="phone" required />
-  </div>
-  <div>
-    <label>Notes:</label>
-    <textarea [(ngModel)]="client.notes" name="notes"></textarea>
-  </div>
-  <button type="submit">Save</button>
-  <button type="button" (click)="cancel()">Cancel</button>
-</form>
+<mat-card class="client-form-card">
+  <h2 *ngIf="client.id">Edit Client</h2>
+  <h2 *ngIf="!client.id">Add New Client</h2>
+  <form (ngSubmit)="saveClient()">
+    <mat-form-field class="full-width">
+      <mat-label>Name</mat-label>
+      <input matInput [(ngModel)]="client.name" name="name" required />
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Phone</mat-label>
+      <input matInput [(ngModel)]="client.phone" name="phone" required />
+    </mat-form-field>
+    <mat-form-field class="full-width">
+      <mat-label>Notes</mat-label>
+      <textarea matInput [(ngModel)]="client.notes" name="notes"></textarea>
+    </mat-form-field>
+    <div class="button-group">
+      <button mat-raised-button color="primary" type="submit">Save</button>
+      <button mat-raised-button color="warn" type="button" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </form>
+</mat-card>

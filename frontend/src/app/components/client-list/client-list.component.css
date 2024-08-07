@@ -1,0 +1,18 @@
+.mat-card {
+  margin: 20px;
+  padding: 20px;
+}
+
+.mat-headline {
+  margin-bottom: 20px;
+}
+
+.add-client-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+}
+
+.mat-elevation-z8 {
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+}
