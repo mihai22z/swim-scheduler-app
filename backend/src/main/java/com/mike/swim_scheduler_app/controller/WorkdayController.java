@@ -1,5 +1,6 @@
 package com.mike.swim_scheduler_app.controller;
 
+import com.mike.swim_scheduler_app.model.TimeSlot;
 import com.mike.swim_scheduler_app.model.Workday;
 import com.mike.swim_scheduler_app.service.WorkdayService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,13 @@ public class WorkdayController {
         return workdayService.findById(id)
                 .map(workday -> ResponseEntity.ok().body(workday))
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/{id}/timeslots")
+    public ResponseEntity<List<TimeSlot>> getTimeslotsForWorkday(@PathVariable Long id) {
+        System.out.println("Endpoint triggered with ID: " + id);
+        List<TimeSlot> timeSlots = workdayService.getTimeSlotsForDay(id);
+        return ResponseEntity.ok(timeSlots);
     }
 
     @PostMapping

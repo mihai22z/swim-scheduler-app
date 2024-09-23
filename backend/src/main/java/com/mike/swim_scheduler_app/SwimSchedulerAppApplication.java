@@ -54,24 +54,24 @@ public class SwimSchedulerAppApplication implements CommandLineRunner {
 			client3 = clientRepository.save(client3);
 
 			Workday workday1 = new Workday();
-			workday1.setDate(LocalDate.of(2024, 8, 15));
-			workday1.setStartTime(LocalDateTime.of(2024, 8, 15, 9, 0));
-			workday1.setEndTime(LocalDateTime.of(2024, 8, 15, 15, 0));
+			workday1.setDate(LocalDate.of(2024, 9, 15));
+			workday1.setStartTime(LocalDateTime.of(2024, 9, 15, 9, 0));
+			workday1.setEndTime(LocalDateTime.of(2024, 9, 15, 15, 0));
 			workdayRepository.save(workday1);
 
 			Lesson lesson1 = new Lesson();
-			lesson1.setStartTime(LocalDateTime.of(2024, 8, 15, 9, 0));
-			lesson1.setEndTime(LocalDateTime.of(2024, 8, 15, 10, 0));
+			lesson1.setStartTime(LocalDateTime.of(2024, 9, 15, 9, 0));
+			lesson1.setEndTime(LocalDateTime.of(2024, 9, 15, 10, 0));
 			lesson1.setWorkday(workday1);
 
 			Lesson lesson2 = new Lesson();
-			lesson2.setStartTime(LocalDateTime.of(2024, 8, 15, 10, 30));
-			lesson2.setEndTime(LocalDateTime.of(2024, 8, 15, 11, 30));
+			lesson2.setStartTime(LocalDateTime.of(2024, 9, 15, 10, 30));
+			lesson2.setEndTime(LocalDateTime.of(2024, 9, 15, 11, 30));
 			lesson2.setWorkday(workday1);
 
 			Lesson lesson3 = new Lesson();
-			lesson3.setStartTime(LocalDateTime.of(2024, 8, 15, 14, 0));
-			lesson3.setEndTime(LocalDateTime.of(2024, 8, 15, 15, 0));
+			lesson3.setStartTime(LocalDateTime.of(2024, 9, 15, 14, 0));
+			lesson3.setEndTime(LocalDateTime.of(2024, 9, 15, 15, 0));
 			lesson3.setWorkday(workday1);
 
 			lesson1 = lessonRepository.save(lesson1);

@@ -4,9 +4,8 @@ import {
   ChangeDetectorRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WorkdayService } from '../../services/workday.service';
-import { ClientService } from '../../services/client.service';
 import { LessonService } from '../../services/lesson.service';
 import { Workday } from '../../models/workday';
 import { CommonModule } from '@angular/common';
@@ -45,6 +44,7 @@ export class WorkdayDetailComponent {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private workdayService: WorkdayService,
     private lessonService: LessonService,
     private datePipe: DatePipe,
@@ -100,7 +100,18 @@ export class WorkdayDetailComponent {
     });
   }
 
-  rescheduleLesson(lessonId: number | null): void {}
+  rescheduleLesson(lessonId: number | null): void {
+    if (!lessonId || !this.workday) {
+      return;
+    }
+    this.router.navigate(['/add-lesson'], {
+      queryParams: {
+        lessonId: lessonId,
+        editMode: true,
+        workday: JSON.stringify(this.workday),
+      },
+    });
+  }
 
   removeLesson(lessonId: number | null): void {}
 }

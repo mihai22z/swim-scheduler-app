@@ -1,15 +1,20 @@
 package com.mike.swim_scheduler_app.controller;
 
 import com.mike.swim_scheduler_app.model.Client;
+import com.mike.swim_scheduler_app.model.ClientLesson;
 import com.mike.swim_scheduler_app.model.Lesson;
+import com.mike.swim_scheduler_app.model.Workday;
 import com.mike.swim_scheduler_app.service.ClientLessonService;
 import com.mike.swim_scheduler_app.service.LessonService;
+import com.mike.swim_scheduler_app.service.WorkdayService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/lessons")
@@ -18,6 +23,8 @@ public class LessonController {
     private LessonService lessonService;
     @Autowired
     private ClientLessonService clientLessonService;
+    @Autowired
+    private WorkdayService workdayService;
 
     @GetMapping
     public ResponseEntity<List<Lesson>> listLessons() {
@@ -46,15 +53,29 @@ public class LessonController {
 
     @PostMapping
     public ResponseEntity<Lesson> createLesson(@RequestBody Lesson lesson) {
-        Lesson savedLesson = lessonService.save(lesson);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedLesson);
+        System.out.println("Received lesson: " + lesson);
+        System.out.println("Client Lessons Size: " + lesson.getClientLessons().size());
+
+        try {
+            Lesson savedLesson = lessonService.save(lesson);
+            return ResponseEntity.ok(savedLesson);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Lesson> updateLesson(@PathVariable Long id, @RequestBody Lesson lesson) {
         return lessonService.findById(id)
                 .map(existingLesson -> {
+                    if (!existingLesson.getWorkday().getId().equals(lesson.getWorkday().getId())) {
+                        Workday previousWorkday = existingLesson.getWorkday();
+                        previousWorkday.getLessons().remove(existingLesson);
+                        workdayService.save(previousWorkday);
+                    }
+
                     lesson.setId(id);
+
                     Lesson updatedLesson = lessonService.save(lesson);
                     return ResponseEntity.ok().body(updatedLesson);
                 })

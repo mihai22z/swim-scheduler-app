@@ -71,6 +71,10 @@ button:hover {
   background-color: #383f57;
 }
 
+.selected-day {
+  border: 2px solid #6200ea;
+}
+
 .day-container {
   display: block;
   width: 100%;
@@ -100,4 +104,11 @@ button:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   overflow: hidden;
+}
+
+.pointer-cursor:hover {
+  cursor: pointer;
+  background-color: #3c4f64;
+  color: #fff;
+  transition: background-color 0.3s, color 0.3s;
 }

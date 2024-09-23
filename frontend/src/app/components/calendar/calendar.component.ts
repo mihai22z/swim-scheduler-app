@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { WorkdayService } from '../../services/workday.service';
 import { Workday } from '../../models/workday';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-calendar',
@@ -12,8 +13,16 @@ import { Router } from '@angular/router';
   styleUrl: './calendar.component.css',
 })
 export class CalendarComponent implements OnInit {
+  @Input() mode: 'overview' | 'lesson-scheduler' = 'overview';
+  @Output() daySelected = new EventEmitter<{
+    date: Date;
+    workday: Workday | null;
+  }>();
+
   currentMonth: Date = new Date();
   workdays: Workday[] = [];
+  selectedDate: Date | null = null;
+  private workdaysSubscription: Subscription | undefined;
 
   constructor(
     private workdayService: WorkdayService,
@@ -22,38 +31,23 @@ export class CalendarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadWorkdays();
+    this.workdaysSubscription = this.workdayService
+      .getWorkdaysObservable()
+      .subscribe((workdays) => {
+        this.workdays = workdays;
+      });
+
+    this.workdayService.loadWorkdays().subscribe();
   }
 
-  loadWorkdays(): void {
-    this.workdayService.getWorkDays().subscribe((data: Workday[]) => {
-      this.workdays = data;
-    });
-  }
-
-  loadMockWorkdays(): void {
-    this.workdays = [
-      {
-        id: 1,
-        date: '2024-07-26',
-        startTime: '09:00',
-        endTime: '17:00',
-        lessons: [],
-      },
-      {
-        id: 2,
-        date: '2024-07-25',
-        startTime: '10:00',
-        endTime: '13:00',
-        lessons: [],
-      },
-    ];
+  ngOnDestroy(): void {
+    if (this.workdaysSubscription) {
+      this.workdaysSubscription.unsubscribe();
+    }
   }
 
   getWorkdayForDate(date: Date): Workday | undefined {
-    return this.workdays.find(
-      (workday) => new Date(workday.date).toDateString() === date.toDateString()
-    );
+    return this.workdayService.getWorkdayForDate(date);
   }
 
   generateCalendar(): (Date | null)[][] {
@@ -104,6 +98,20 @@ export class CalendarComponent implements OnInit {
 
   isCurrentDay(day: Date): boolean {
     return day.toDateString() === new Date().toDateString();
+  }
+
+  selectDay(day: Date): void {
+    this.selectedDate = day;
+    console.log('Selected Date:', this.selectedDate);
+    if (this.mode === 'lesson-scheduler') {
+      const workday = this.getWorkdayForDate(day);
+      this.daySelected.emit({ date: day, workday: workday || null });
+    } else {
+      const workdayId = this.getWorkdayForDate(day)?.id;
+      if (workdayId != undefined) {
+        this.router.navigate(['/workday', workdayId]);
+      }
+    }
   }
 
   viewDayDetails(workdayId: number | undefined): void {

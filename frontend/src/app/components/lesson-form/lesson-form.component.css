@@ -1,0 +1,260 @@
+.add-lesson-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 70px;
+  gap: 20px;
+  padding: 20px;
+  color: #fff;
+  font-family: "Roboto", sans-serif;
+}
+
+.calendar-timeline-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.calendar-section {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.calendar-section h3 {
+  color: #a6a563;
+  margin-bottom: 10px;
+}
+
+.timeline-section {
+  flex: 1;
+}
+
+.timeline-section h3 {
+  color: #a6a563;
+  margin-bottom: 10px;
+}
+
+.timeline {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  background-color: #383f57;
+  gap: 10px;
+  padding: 10px;
+  max-width: 100%;
+  max-height: 870px;
+  overflow-y: auto;
+  border-radius: 8px;
+}
+
+.timeline-slot {
+  width: calc(33.33% - 10px);
+  padding: 10px;
+  border-radius: 4px;
+  margin-bottom: 4px;
+  background-color: #515667;
+  color: #fff;
+  font-size: 14px;
+  text-align: center;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+
+.timeline-slot:hover {
+  background-color: #6b778d;
+  color: #fff;
+}
+
+.occupied-slot {
+  background-color: #b00020;
+}
+
+.free-slot {
+  background-color: #4caf50;
+}
+
+.selected-slot {
+  background-color: #f5a623;
+}
+
+.timeline-slot:last-child {
+  margin-bottom: 0;
+}
+
+.form-section {
+  width: 95%;
+  background-color: #383f57;
+  padding: 20px;
+  margin: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  color: #a6a563;
+  margin-bottom: 20px;
+}
+
+form div {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.time-display {
+  display: inline-block;
+  background-color: #5d72b4;
+  color: #ffffff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  cursor: default;
+}
+
+input[type="text"],
+input[type="time"],
+select {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #515667;
+  color: #fff;
+}
+
+input[type="time"] {
+  width: 98%;
+}
+
+.client-selection-container {
+  display: flex;
+  gap: 20px;
+}
+
+.client-list-container {
+  flex: 1;
+  background-color: #37474f;
+  padding: 20px;
+  border-radius: 8px;
+  padding-right: 12px;
+  margin-right: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.client-list-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.client-list-container::-webkit-scrollbar-track {
+  background: #383f57;
+  border-radius: 8px;
+}
+
+.client-list-container::-webkit-scrollbar-thumb {
+  background-color: #a6a563;
+  border-radius: 8px;
+  border: 2px solid #383f57;
+}
+
+.client-list-container::-webkit-scrollbar-thumb:hover {
+  background-color: #a8ab45;
+}
+
+.client-list-container {
+  scrollbar-width: thin;
+  scrollbar-color: #a6a563 #383f57;
+}
+
+.client-list-container h3 {
+  color: #a6a563;
+  margin-bottom: 10px;
+}
+
+.client-list {
+  display: flex;
+  flex-direction: column;
+  padding-right: 10px;
+  gap: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.client-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #263238;
+  color: #ffffff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.client-card:hover {
+  background-color: #546e7a;
+}
+
+.client-action-icon-add {
+  cursor: pointer;
+  color: #81c784;
+}
+
+.client-action-icon-add:hover {
+  color: #388e3c;
+}
+
+.client-action-icon-remove {
+  cursor: pointer;
+  color: red;
+}
+
+.client-action-icon-remove:hover {
+  color: #121212;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  background-color: #515667;
+  color: #fff;
+}
+
+button[type="submit"],
+button[type="button"] {
+  margin-right: 10px;
+  padding: 10px 20px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button[type="submit"] {
+  background-color: #6200ea;
+  color: #fff;
+}
+
+button[type="submit"]:hover {
+  background-color: #3700b3;
+}
+
+button[type="button"] {
+  background-color: #b00020;
+  color: #fff;
+}
+
+button[type="button"]:hover {
+  background-color: #7f0000;
+}

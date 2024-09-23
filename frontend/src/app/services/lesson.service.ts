@@ -31,4 +31,12 @@ export class LessonService {
       })
     );
   }
+
+  updateLesson(id: number, lesson: Lesson): Observable<Lesson> {
+    return this.http.put<Lesson>(`${API_URL}/${id}`, lesson);
+  }
+
+  createLesson(lesson: Lesson): Observable<Lesson> {
+    return this.http.post<Lesson>(API_URL, lesson);
+  }
 }
