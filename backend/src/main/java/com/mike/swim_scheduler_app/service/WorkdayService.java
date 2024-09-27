@@ -7,6 +7,7 @@ import com.mike.swim_scheduler_app.repository.WorkdayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
@@ -22,6 +23,10 @@ public class WorkdayService {
 
     public Optional<Workday> findById(Long id) {
         return workdayRepository.findById(id);
+    }
+
+    public Workday findByDate(LocalDate date) {
+        return workdayRepository.findByDate(date).orElse(null);
     }
 
     public Workday save(Workday workday) {

@@ -68,15 +68,31 @@ public class LessonController {
     public ResponseEntity<Lesson> updateLesson(@PathVariable Long id, @RequestBody Lesson lesson) {
         return lessonService.findById(id)
                 .map(existingLesson -> {
-                    if (!existingLesson.getWorkday().getId().equals(lesson.getWorkday().getId())) {
-                        Workday previousWorkday = existingLesson.getWorkday();
+                    Workday previousWorkday = existingLesson.getWorkday();
+
+                    // Update the lesson and associate with the new workday
+                    lesson.setId(id);
+                    Lesson updatedLesson = lessonService.save(lesson);
+
+                    // After saving, check if the lesson was moved to a different workday
+                    if (!previousWorkday.getId().equals(lesson.getWorkday().getId())) {
+                        // Remove the lesson from the old workday
                         previousWorkday.getLessons().remove(existingLesson);
                         workdayService.save(previousWorkday);
+
+                        // If the previous workday has no more lessons, delete it
+                        if (previousWorkday.getLessons().isEmpty()) {
+                            System.out.println("I AM DELETING THE EMPTY WORKDAY");
+                            workdayService.deleteById(previousWorkday.getId());
+                        }
+                        else {
+                            System.out.println("SORRY BRO, EMPTY BUT NOT DELETED: " + previousWorkday.getLessons());
+                        }
+                    }
+                    else {
+                        System.out.println("WHAT DO YOU MEAN DUDE");
                     }
 
-                    lesson.setId(id);
-
-                    Lesson updatedLesson = lessonService.save(lesson);
                     return ResponseEntity.ok().body(updatedLesson);
                 })
                 .orElse(ResponseEntity.notFound().build());

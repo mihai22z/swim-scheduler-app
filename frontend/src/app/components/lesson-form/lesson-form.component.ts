@@ -91,13 +91,29 @@ export class LessonFormComponent implements OnInit {
           .subscribe((data: Lesson) => {
             this.lesson = data;
 
+            console.log('Raw startTime from backend:', data.startTime);
             this.selectedDate = this.extractDateFromDateTime(data.startTime);
+            console.log('Parsed selectedDate:', this.selectedDate);
             this.lesson.startTime = this.formatTime(data.startTime);
             this.lesson.endTime = this.formatTime(data.endTime);
 
-            console.log('Updating timeline for workday:', this.lesson.workday);
+            if (!this.lesson.workday) {
+              console.log(
+                'Workday missing, fetching by date:',
+                this.selectedDate
+              );
 
-            if (this.lesson.workday) {
+              const workday = this.workdayService.getWorkdayForDate(
+                this.selectedDate
+              );
+              if (workday) {
+                this.lesson.workday = workday;
+                this.updateTimeline(workday);
+              } else {
+                console.error('No workday found for this date');
+              }
+            } else {
+              console.log('Workday exists in lesson:', this.lesson.workday);
               this.updateTimeline(this.lesson.workday);
             }
 
@@ -273,48 +289,6 @@ export class LessonFormComponent implements OnInit {
       this.lesson.endTime.split('T').pop() || this.lesson.endTime
     );
 
-    this.workdayService.loadWorkdays().subscribe((workdays: Workday[]) => {
-      const existingWorkday = this.workdayService.getWorkdayForDate(
-        this.selectedDate!
-      );
-
-      if (existingWorkday) {
-        this.attachWorkdayAndSaveLesson(
-          existingWorkday,
-          formattedStartTime,
-          formattedEndTime
-        );
-      } else {
-        const newWorkday: Workday = {
-          id: null,
-          date: this.selectedDate!.toISOString().split('T')[0],
-          startTime: formattedStartTime,
-          endTime: formattedEndTime,
-          lessons: [],
-        };
-
-        this.workdayService.createWorkday(newWorkday).subscribe(
-          (createdWorkday) => {
-            this.attachWorkdayAndSaveLesson(
-              createdWorkday,
-              formattedStartTime,
-              formattedEndTime
-            );
-          },
-          (error) => {
-            console.error('Error creating workday:', error);
-          }
-        );
-      }
-    });
-  }
-
-  attachWorkdayAndSaveLesson(
-    workday: Workday,
-    formattedStartTime: string,
-    formattedEndTime: string
-  ): void {
-    this.lesson.workday = workday;
     this.lesson.startTime = formattedStartTime;
     this.lesson.endTime = formattedEndTime;
     this.lesson.clients = this.selectedClients;
@@ -329,8 +303,10 @@ export class LessonFormComponent implements OnInit {
     if (this.isEditMode) {
       this.lessonService.updateLesson(this.lesson.id!, this.lesson).subscribe(
         (response) => {
+          if (this.lesson.workday) {
+            console.log('Workday ID: ', this.lesson.workday.id);
+          }
           console.log('Lesson updated successfully:', response);
-          this.workdayService.loadWorkdays();
           this.router.navigate(['/calendar']);
         },
         (error) => {
@@ -341,7 +317,6 @@ export class LessonFormComponent implements OnInit {
       this.lessonService.createLesson(this.lesson).subscribe(
         (response) => {
           console.log('Lesson created successfully:', response);
-          this.workdayService.loadWorkdays();
           this.router.navigate(['/calendar']);
         },
         (error) => {
@@ -374,14 +349,9 @@ export class LessonFormComponent implements OnInit {
   extractDateFromDateTime(dateTime: string): Date {
     const [datePart, timePart] = dateTime.split('T');
     const [year, month, day] = datePart.split('-').map(Number);
-    const dateObj = new Date(year, month - 1, day);
+    const [hours, minutes] = timePart.split(':').map(Number);
 
-    if (timePart) {
-      const [hours, minutes] = timePart.split(':').map(Number);
-      dateObj.setUTCHours(hours, minutes);
-    }
-
-    return dateObj;
+    return new Date(year, month - 1, day, hours, minutes);
   }
 
   getWorkdayForDate(date: Date): Workday | undefined {

@@ -9,6 +9,7 @@ import com.mike.swim_scheduler_app.repository.WorkdayRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -36,21 +37,23 @@ public class LessonService {
     }
 
     public Lesson save(Lesson lesson) {
-        if (lesson.getWorkday() == null) {
-            throw new IllegalArgumentException("Lesson must be associated with a Workday.");
-        }
+        // Extract the date from the lesson's startTime
+        LocalDate lessonDate = lesson.getStartTime().toLocalDate();
 
-        // Ensure Workday is saved or fetched
-        Workday workday = lesson.getWorkday();
-        if (workday.getId() == null) {
+        // Check if a workday already exists for the date
+        Workday workday = workdayService.findByDate(lessonDate);
+
+        // If no existing workday is found, create a new one
+
+        if (workday == null) {
+            workday = new Workday();
+            workday.setDate(lessonDate);
+            workday.setStartTime(lesson.getStartTime());
+            workday.setEndTime(lesson.getEndTime());
             workday = workdayService.save(workday);
         }
-        else {
-            workday = workdayService.findById(workday.getId()).orElseThrow(
-                    () -> new IllegalArgumentException("Workday not found")
-            );
-        }
-        lesson.setWorkday(workday);
+
+        lesson.setWorkday(workday); // Associate the lesson with the workday
 
         Set<ClientLesson> clientLessons = new HashSet<>(lesson.getClientLessons());
         lesson.getClientLessons().clear();
@@ -73,20 +76,22 @@ public class LessonService {
             }
         }
 
-        // Ensure the lesson is properly associated with its workday
-        Workday associatedWorkday = savedLesson.getWorkday();
-        if (associatedWorkday != null && !associatedWorkday.getLessons().contains(savedLesson)) {
-            associatedWorkday.getLessons().add(savedLesson);
-            workdayService.save(associatedWorkday);
-        }
-
-        // Update Workday times based on lessons
+        // Update Workday with the new lesson and update times if necessary
+        workday.getLessons().add(savedLesson);
         workdayService.updateWorkdayTimes(savedLesson.getWorkday());
 
         return savedLesson;
     }
 
     public void deleteById(Long id) {
+        Lesson lesson = lessonRepository.findById(id)
+                        .orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
+
+        Workday workday = lesson.getWorkday();
         lessonRepository.deleteById(id);
+
+        if (workday != null && workday.getLessons().isEmpty()) {
+            workdayService.deleteById(workday.getId());
+        }
     }
 }

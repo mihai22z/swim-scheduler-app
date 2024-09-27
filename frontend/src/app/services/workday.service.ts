@@ -48,9 +48,11 @@ export class WorkdayService {
   }
 
   getWorkdayForDate(date: Date): Workday | undefined {
-    return this.workdaysSubject.value.find(
-      (workday) => new Date(workday.date).toDateString() === date.toDateString()
-    );
+    return this.workdaysSubject.value.find((workday) => {
+      const workdayDate = new Date(workday.date).setHours(0, 0, 0, 0);
+      const inputDate = date.setHours(0, 0, 0, 0);
+      return workdayDate === inputDate;
+    });
   }
 
   getWorkdaysObservable(): Observable<Workday[]> {
