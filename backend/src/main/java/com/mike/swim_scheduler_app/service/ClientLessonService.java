@@ -2,6 +2,7 @@ package com.mike.swim_scheduler_app.service;
 
 import com.mike.swim_scheduler_app.model.Client;
 import com.mike.swim_scheduler_app.model.ClientLesson;
+import com.mike.swim_scheduler_app.model.ClientLessonId;
 import com.mike.swim_scheduler_app.model.Lesson;
 import com.mike.swim_scheduler_app.repository.ClientLessonRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,5 +39,9 @@ public class ClientLessonService {
     public void removeClientLessonsForLesson(Lesson lesson) {
         List<ClientLesson> clientLessons = clientLessonRepository.findAllByLessonId(lesson.getId());
         clientLessonRepository.deleteAll(clientLessons);
+    }
+
+    public void removeClientLessonById(ClientLessonId id) {
+        clientLessonRepository.deleteById(id);
     }
 }

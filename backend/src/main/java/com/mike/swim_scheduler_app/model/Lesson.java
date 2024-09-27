@@ -24,6 +24,15 @@ public class Lesson {
     @JsonBackReference
     private Workday workday;
 
+    public Lesson(Long id, LocalDateTime startTime, LocalDateTime endTime) {
+        this.id = id;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public Lesson() {
+    }
+
     public Long getId() {
         return id;
     }
