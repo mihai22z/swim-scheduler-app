@@ -31,13 +31,7 @@ export class CalendarComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.workdaysSubscription = this.workdayService
-      .getWorkdaysObservable()
-      .subscribe((workdays) => {
-        this.workdays = workdays;
-      });
-
-    this.workdayService.loadWorkdays().subscribe();
+    this.loadWorkdaysForMonth(this.currentMonth);
   }
 
   ngOnDestroy(): void {
@@ -46,8 +40,38 @@ export class CalendarComponent implements OnInit {
     }
   }
 
+  loadWorkdaysForMonth(date: Date): void {
+    this.workdayService
+      .loadWorkdaysForMonth(date)
+      .subscribe((data: Workday[]) => {
+        this.workdays = data;
+        this.generateCalendar();
+      });
+  }
+
+  nextMonth(): void {
+    this.currentMonth = new Date(
+      this.currentMonth.setMonth(this.currentMonth.getMonth() + 1)
+    );
+    this.loadWorkdaysForMonth(this.currentMonth);
+  }
+
+  previousMonth(): void {
+    this.currentMonth = new Date(
+      this.currentMonth.setMonth(this.currentMonth.getMonth() - 1)
+    );
+    this.loadWorkdaysForMonth(this.currentMonth);
+  }
+
   getWorkdayForDate(date: Date): Workday | undefined {
-    return this.workdayService.getWorkdayForDate(date);
+    if (!this.workdays) {
+      return undefined;
+    }
+
+    const workday = this.workdays.find(
+      (workday) => new Date(workday.date).toDateString() === date.toDateString()
+    );
+    return workday;
   }
 
   generateCalendar(): (Date | null)[][] {

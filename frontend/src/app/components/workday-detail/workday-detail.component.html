@@ -32,17 +32,10 @@
           </mat-list>
 
           <mat-action-row>
-            <button mat-button color="primary" (click)="editClients(lesson)">
-              Edit Clients
+            <button type="edit" (click)="rescheduleLesson(lesson.id)">
+              Edit
             </button>
-            <button
-              mat-button
-              color="accent"
-              (click)="rescheduleLesson(lesson.id)"
-            >
-              Reschedule
-            </button>
-            <button mat-button color="warn" (click)="removeLesson(lesson.id)">
+            <button type="remove" (click)="removeLesson(lesson.id)">
               Remove
             </button>
           </mat-action-row>

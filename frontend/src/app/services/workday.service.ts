@@ -47,6 +47,14 @@ export class WorkdayService {
     );
   }
 
+  loadWorkdaysForMonth(date: Date): Observable<Workday[]> {
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1;
+    return this.http.get<Workday[]>(
+      `${API_URL}/month?year=${year}&month=${month}`
+    );
+  }
+
   getWorkdayForDate(date: Date): Workday | undefined {
     return this.workdaysSubject.value.find((workday) => {
       const workdayDate = new Date(workday.date).setHours(0, 0, 0, 0);

@@ -39,6 +39,17 @@ public class WorkdayController {
         return ResponseEntity.ok(timeSlots);
     }
 
+    @GetMapping("/month")
+    public ResponseEntity<List<Workday>> getWorkdaysForMonth(@RequestParam int year, @RequestParam int month) {
+        List<Workday> workdays = workdayService.getWorkdaysForMonth(year, month);
+        if (workdays.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        else {
+            return ResponseEntity.ok(workdays);
+        }
+    }
+
     @PostMapping
     public ResponseEntity<Workday> createWorkday(@RequestBody Workday workday) {
         Workday savedWorkday = workdayService.save(workday);

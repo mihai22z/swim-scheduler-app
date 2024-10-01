@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class WorkdayService {
@@ -35,6 +36,16 @@ public class WorkdayService {
 
     public void deleteById(Long id) {
         workdayRepository.deleteById(id);
+    }
+
+    public List<Workday> getWorkdaysForMonth(int year, int month) {
+        return workdayRepository.findAll()
+                .stream()
+                .filter(workday -> {
+                    LocalDate date = workday.getDate();
+                    return date.getMonthValue() == month && date.getYear() == year;
+                })
+                .collect(Collectors.toList());
     }
 
     public void updateWorkdayTimes(Workday workday) {
