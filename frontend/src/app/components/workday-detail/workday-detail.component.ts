@@ -113,5 +113,18 @@ export class WorkdayDetailComponent {
     });
   }
 
-  removeLesson(lessonId: number | null): void {}
+  removeLesson(lessonId: number | null): void {
+    if (confirm('Are you sure you want to delete this lesson?')) {
+      this.lessonService.deleteLesson(lessonId!).subscribe(
+        () => {
+          console.log('Lesson deleted successfully');
+          this.getWorkdayDetails();
+          this.router.navigate(['/calendar']);
+        },
+        (error) => {
+          console.error('Error deleting lesson:', error);
+        }
+      );
+    }
+  }
 }

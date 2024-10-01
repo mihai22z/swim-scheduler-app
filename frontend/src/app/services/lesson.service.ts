@@ -39,4 +39,8 @@ export class LessonService {
   createLesson(lesson: Lesson): Observable<Lesson> {
     return this.http.post<Lesson>(API_URL, lesson);
   }
+
+  deleteLesson(id: number): Observable<void> {
+    return this.http.delete<void>(`${API_URL}/${id}`);
+  }
 }

@@ -87,11 +87,28 @@ public class LessonService {
         Lesson lesson = lessonRepository.findById(id)
                         .orElseThrow(() -> new IllegalArgumentException("Lesson not found"));
 
+        // Handle ClientLesson associations (remove them from both sides)
+        Set<ClientLesson> clientLessons = lesson.getClientLessons();
+        if (clientLessons != null && !clientLessons.isEmpty()) {
+            for (ClientLesson clientLesson : clientLessons) {
+                Client client = clientLesson.getClient();
+                if (client != null) {
+                    client.getClientLessons().remove(clientLesson); // Remove from client
+                    clientService.save(client);
+                }
+                clientLessonService.removeClientLessonById(clientLesson.getId()); // Delete ClientLesson from DB
+            }
+        }
+
         Workday workday = lesson.getWorkday();
         lessonRepository.deleteById(id);
 
         if (workday != null && workday.getLessons().isEmpty()) {
             workdayService.deleteById(workday.getId());
+        }
+
+        if (!workday.getLessons().isEmpty()) {
+            workdayService.updateWorkdayTimes(workday);
         }
     }
 }
