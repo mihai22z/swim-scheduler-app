@@ -6,4 +6,7 @@ export interface Client {
   phone: string;
   notes: string;
   clientLessons: ClientLesson[];
+  subscriptionTotalLessons?: number;
+  remainingLessons?: number;
+  subscriptionStartDate?: string;
 }

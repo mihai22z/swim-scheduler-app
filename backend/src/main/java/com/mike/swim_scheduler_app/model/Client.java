@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,6 +19,9 @@ public class Client {
     private String name;
     private String phone;
     private String notes;
+    private int subscriptionTotalLessons;
+    private int remainingLessons;
+    private LocalDate subscriptionStartDate;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<ClientLesson> clientLessons = new HashSet<>();
@@ -59,5 +64,29 @@ public class Client {
 
     public void setClientLessons(Set<ClientLesson> clientLessons) {
         this.clientLessons = clientLessons;
+    }
+
+    public int getSubscriptionTotalLessons() {
+        return subscriptionTotalLessons;
+    }
+
+    public void setSubscriptionTotalLessons(int subscriptionTotalLessons) {
+        this.subscriptionTotalLessons = subscriptionTotalLessons;
+    }
+
+    public int getRemainingLessons() {
+        return remainingLessons;
+    }
+
+    public void setRemainingLessons(int remainingLessons) {
+        this.remainingLessons = remainingLessons;
+    }
+
+    public LocalDate getSubscriptionStartDate() {
+        return subscriptionStartDate;
+    }
+
+    public void setSubscriptionStartDate(LocalDate subscriptionStartDate) {
+        this.subscriptionStartDate = subscriptionStartDate;
     }
 }

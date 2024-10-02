@@ -25,7 +25,15 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class ClientListComponent implements OnInit {
   clients: Client[] = [];
-  displayedColumns: string[] = ['name', 'phone', 'notes', 'actions'];
+  displayedColumns: string[] = [
+    'name',
+    'phone',
+    'notes',
+    'subscriptionTotalLessons',
+    'remainingLessons',
+    'subscriptionStartDate',
+    'actions',
+  ];
 
   constructor(private clientService: ClientService, public router: Router) {}
 

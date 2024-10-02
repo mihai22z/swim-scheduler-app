@@ -17,6 +17,25 @@
         <td mat-cell *matCellDef="let client">{{ client.notes }}</td>
       </ng-container>
 
+      <ng-container matColumnDef="subscriptionTotalLessons">
+        <th mat-header-cell *matHeaderCellDef>Total Sub Lessons</th>
+        <td mat-cell *matCellDef="let client">
+          {{ client.subscriptionTotalLessons }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="remainingLessons">
+        <th mat-header-cell *matHeaderCellDef>Remaining Lessons</th>
+        <td mat-cell *matCellDef="let client">{{ client.remainingLessons }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="subscriptionStartDate">
+        <th mat-header-cell *matHeaderCellDef>Sub Start Date</th>
+        <td mat-cell *matCellDef="let client">
+          {{ client.subscriptionStartDate }}
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="actions">
         <th mat-header-cell *matHeaderCellDef>Actions</th>
         <td mat-cell *matCellDef="let client">

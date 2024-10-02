@@ -16,3 +16,39 @@
 .mat-elevation-z8 {
   box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  text-align: center;
+  background-color: #2c3e50;
+  color: white;
+  font-weight: bold;
+}
+
+td {
+  background-color: #34495e;
+  color: white;
+  text-align: center;
+  padding: 12px;
+  font-size: 14px;
+}
+
+tr:nth-child(even) td {
+  background-color: #3b4a5a;
+}
+
+tr:hover td {
+  background-color: #2e4053;
+}
+
+button {
+  color: #ff5733;
+}
+
+button:hover {
+  background-color: #1f2a36;
+}
