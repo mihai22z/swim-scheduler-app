@@ -4,6 +4,7 @@ import { ClientFormComponent } from './components/client-form/client-form.compon
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { WorkdayDetailComponent } from './components/workday-detail/workday-detail.component';
 import { LessonFormComponent } from './components/lesson-form/lesson-form.component';
+import { AddSubscriptionComponent } from './components/add-subscription/add-subscription.component';
 
 export const routes: Routes = [
   { path: 'clients', component: ClientListComponent },
@@ -13,5 +14,6 @@ export const routes: Routes = [
   { path: 'workday/:id', component: WorkdayDetailComponent },
   { path: 'add-lesson', component: LessonFormComponent },
   { path: 'reschedule-lesson/:id', component: LessonFormComponent },
+  { path: 'add-subscription', component: AddSubscriptionComponent },
   { path: '', redirectTo: '/clients', pathMatch: 'full' },
 ];

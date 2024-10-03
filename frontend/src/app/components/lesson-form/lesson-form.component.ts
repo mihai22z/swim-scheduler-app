@@ -1,4 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  AfterViewInit,
+  ChangeDetectorRef,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LessonService } from '../../services/lesson.service';
 import { ClientService } from '../../services/client.service';
@@ -14,6 +19,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { CalendarComponent } from '../calendar/calendar.component';
+import { ClientSelectorComponent } from '../client-selector/client-selector.component';
 
 @Component({
   selector: 'app-lesson-form',
@@ -27,6 +33,7 @@ import { CalendarComponent } from '../calendar/calendar.component';
     MatIconModule,
     MatCardModule,
     CalendarComponent,
+    ClientSelectorComponent,
   ],
   templateUrl: './lesson-form.component.html',
   styleUrl: './lesson-form.component.css',
@@ -42,10 +49,7 @@ export class LessonFormComponent implements OnInit {
     clientLessons: [],
   };
   workdays: Workday[] = [];
-  clients: Client[] = [];
   selectedClients: Client[] = [];
-  availableClients: Client[] = [];
-  filteredClients: Client[] = [];
   timeSlots: { time: string; occupied: boolean; selected: boolean }[] = [];
   isEditMode: boolean = false;
   selectedDate: Date | null = null;
@@ -53,7 +57,6 @@ export class LessonFormComponent implements OnInit {
   lessonDuration: number = 45;
   formattedStartTime: string = '';
   formattedEndTime: string = '';
-  searchQuery: string = '';
 
   constructor(
     private lessonService: LessonService,
@@ -66,11 +69,7 @@ export class LessonFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.clientService.getClients().subscribe((data: Client[]) => {
-      this.clients = data;
-      this.availableClients = [...data];
-      this.filteredClients = [...data];
-    });
+    this.clientService.getClients().subscribe((data: Client[]) => {});
 
     this.workdayService.loadWorkdays().subscribe((data: Workday[]) => {
       this.workdays = data;
@@ -90,12 +89,15 @@ export class LessonFormComponent implements OnInit {
           .getLessonById(Number(lessonId))
           .subscribe((data: Lesson) => {
             this.lesson = data;
-
-            console.log('Raw startTime from backend:', data.startTime);
             this.selectedDate = this.extractDateFromDateTime(data.startTime);
-            console.log('Parsed selectedDate:', this.selectedDate);
             this.lesson.startTime = this.formatTime(data.startTime);
             this.lesson.endTime = this.formatTime(data.endTime);
+
+            this.lessonService
+              .getClientsForLesson(Number(lessonId))
+              .subscribe((clients: Client[]) => {
+                this.selectedClients = clients;
+              });
 
             if (!this.lesson.workday) {
               console.log(
@@ -113,16 +115,8 @@ export class LessonFormComponent implements OnInit {
                 console.error('No workday found for this date');
               }
             } else {
-              console.log('Workday exists in lesson:', this.lesson.workday);
               this.updateTimeline(this.lesson.workday);
             }
-
-            this.lessonService
-              .getClientsForLesson(Number(lessonId))
-              .subscribe((clients: Client[]) => {
-                this.selectedClients = clients;
-                this.filterClients();
-              });
           });
       }
     });
@@ -240,38 +234,8 @@ export class LessonFormComponent implements OnInit {
       : 'Select clients';
   }
 
-  filterClients(): void {
-    const selectedClientsIds = this.selectedClients.map((client) => client.id);
-
-    if (!this.searchQuery) {
-      this.filteredClients = this.availableClients.filter(
-        (client) => !selectedClientsIds.includes(client.id)
-      );
-    } else {
-      this.filteredClients = this.availableClients.filter(
-        (client) =>
-          !selectedClientsIds.includes(client.id) &&
-          client.name.toLowerCase().includes(this.searchQuery.toLowerCase())
-      );
-    }
-  }
-
-  addClient(client: Client): void {
-    if (
-      !this.selectedClients.some(
-        (selectedClient) => selectedClient.id === client.id
-      )
-    ) {
-      this.selectedClients.push(client);
-      this.filterClients();
-    }
-  }
-
-  removeClient(client: Client): void {
-    this.selectedClients = this.selectedClients.filter(
-      (selectedClient) => selectedClient.id !== client.id
-    );
-    this.filterClients();
+  onSelectedClientsChange(clients: Client[]): void {
+    this.selectedClients = clients;
   }
 
   saveLesson(): void {

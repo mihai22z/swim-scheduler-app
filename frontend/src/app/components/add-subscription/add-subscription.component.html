@@ -1,0 +1,55 @@
+<div>
+  <h2>Create Subscription</h2>
+  <mat-card>
+    <form>
+      <div class="day-selection-container">
+        <div
+          class="day-cell"
+          *ngFor="let dayObj of daysOfWeek"
+          [class.selected]="dayObj.selected"
+          (click)="toggleDaySelection(dayObj.day)"
+          class="day-btn"
+        >
+          {{ dayObj.day }}
+        </div>
+      </div>
+
+      <ng-container *ngFor="let dayObj of daysOfWeek">
+        <div *ngIf="dayObj.selected" class="time-slot-container">
+          <h4>{{ dayObj.day }} Time Slot</h4>
+          <mat-form-field appearance="fill">
+            <mat-label>Select Time for {{ dayObj.day }}</mat-label>
+            <mat-select
+              [(ngModel)]="selectedTimes[dayObj.day]"
+              name="timeSlot_{{ dayObj.day }}"
+              required
+            >
+              <mat-option *ngFor="let time of timeSlots" [value]="time">{{
+                time
+              }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </ng-container>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Number of Weeks</mat-label>
+        <input
+          matInput
+          type="number"
+          [(ngModel)]="subscription.totalWeeks"
+          name="totalLessons"
+        />
+      </mat-form-field>
+
+      <app-client-selector
+        [selectedClients]="selectedClients"
+        (selectedClientsChange)="onSelectedClientsChange($event)"
+      ></app-client-selector>
+
+      <button mat-raised-button color="primary" (click)="addSubscription()">
+        Add Subscription
+      </button>
+    </form>
+  </mat-card>
+</div>

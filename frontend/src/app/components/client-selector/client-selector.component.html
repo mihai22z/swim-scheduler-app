@@ -1,0 +1,48 @@
+<div class="client-selection-container">
+  <div class="client-list-container available-clients">
+    <h3>Available Clients</h3>
+    <input
+      type="text"
+      [(ngModel)]="searchQuery"
+      (ngModelChange)="filterClients()"
+      placeholder="Search Clients..."
+      name="searchQuery"
+      class="search-bar"
+    />
+    <div class="client-list">
+      <mat-card
+        class="client-card"
+        *ngFor="let client of filteredClients"
+        (click)="addClient(client)"
+      >
+        <mat-card-content>
+          {{ client.name }}
+        </mat-card-content>
+        <mat-icon class="client-action-icon-add" (click)="addClient(client)">
+          add_circle
+        </mat-icon>
+      </mat-card>
+    </div>
+  </div>
+
+  <div class="client-list-container selected-clients">
+    <h3>Selected Clients</h3>
+    <div class="client-list">
+      <mat-card
+        class="client-card"
+        *ngFor="let client of selectedClients"
+        (click)="removeClient(client)"
+      >
+        <mat-card-content>
+          {{ client.name }}
+        </mat-card-content>
+        <mat-icon
+          class="client-action-icon-remove"
+          (click)="removeClient(client)"
+        >
+          remove_circle
+        </mat-icon>
+      </mat-card>
+    </div>
+  </div>
+</div>

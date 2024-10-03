@@ -1,0 +1,80 @@
+.day-container {
+  display: inline-block;
+  padding: 12px;
+  margin: 8px;
+  background-color: #3b4a5a;
+  color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.day-container.selected {
+  background-color: #ff5733;
+}
+
+.day-container:hover {
+  background-color: #2c3e50;
+}
+
+.day-selection-container {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.day-cell {
+  padding: 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  width: 100px;
+  text-align: center;
+  background-color: #3b4a5a;
+  color: white;
+}
+
+.day-cell.selected {
+  background-color: #2196f3;
+  color: white;
+}
+
+mat-card {
+  margin: 20px;
+  padding: 20px;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+button {
+  display: block;
+  margin-top: 20px;
+}
+
+.day-btn {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #3498db;
+  background-color: #2c3e50;
+  color: white;
+  margin: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.day-btn.selected {
+  background-color: #3498db;
+}
+
+.day-btn:hover {
+  background-color: #2980b9;
+  transform: scale(1.05);
+}
+
+.time-slot {
+  margin-top: 10px;
+}
