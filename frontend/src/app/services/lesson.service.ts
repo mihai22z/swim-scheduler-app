@@ -40,6 +40,10 @@ export class LessonService {
     return this.http.post<Lesson>(API_URL, lesson);
   }
 
+  createSubscription(subscriptionDetails: any): Observable<any> {
+    return this.http.post(`${API_URL}/subscriptions`, subscriptionDetails);
+  }
+
   deleteLesson(id: number): Observable<void> {
     return this.http.delete<void>(`${API_URL}/${id}`);
   }

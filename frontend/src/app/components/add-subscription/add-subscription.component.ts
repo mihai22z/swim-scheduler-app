@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -8,6 +9,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { ClientSelectorComponent } from '../client-selector/client-selector.component';
 import { Client } from '../../models/client';
+import { LessonService } from '../../services/lesson.service';
 
 @Component({
   selector: 'app-add-subscription',
@@ -46,6 +48,12 @@ export class AddSubscriptionComponent implements OnInit {
 
   selectedClients: Client[] = [];
 
+  constructor(
+    private lessonService: LessonService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
+
   ngOnInit(): void {
     const startTime = new Date();
     startTime.setHours(9, 0, 0, 0);
@@ -82,12 +90,28 @@ export class AddSubscriptionComponent implements OnInit {
   addSubscription(): void {
     const subscriptionDetails = {
       days: this.selectedDays().map((day) => ({
-        day,
-        time: this.selectedTimes[day] || 'Not selected',
+        day: day.toUpperCase(),
+        time: this.selectedTimes[day],
       })),
       totalWeeks: this.subscription.totalWeeks,
       startDate: this.subscription.startDate,
       clients: this.selectedClients,
     };
+
+    this.lessonService.createSubscription(subscriptionDetails).subscribe(
+      (response: any) => {
+        console.log('Subscription successfully added:', response);
+        this.router.navigate(['/calendar']);
+      },
+      (error: any) => {
+        if (error.status === 409) {
+          console.error('Subscription conflict:', error.error.message);
+          alert('Conflict: ' + error.error.message);
+        } else {
+          console.error('Error adding subscription:', error);
+          alert('An unexpected error occured while adding the subscription.');
+        }
+      }
+    );
   }
 }

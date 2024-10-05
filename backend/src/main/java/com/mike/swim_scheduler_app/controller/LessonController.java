@@ -1,9 +1,6 @@
 package com.mike.swim_scheduler_app.controller;
 
-import com.mike.swim_scheduler_app.model.Client;
-import com.mike.swim_scheduler_app.model.ClientLesson;
-import com.mike.swim_scheduler_app.model.Lesson;
-import com.mike.swim_scheduler_app.model.Workday;
+import com.mike.swim_scheduler_app.model.*;
 import com.mike.swim_scheduler_app.service.ClientLessonService;
 import com.mike.swim_scheduler_app.service.LessonService;
 import com.mike.swim_scheduler_app.service.WorkdayService;
@@ -12,7 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,14 +52,33 @@ public class LessonController {
 
     @PostMapping
     public ResponseEntity<Lesson> createLesson(@RequestBody Lesson lesson) {
-        System.out.println("Received lesson: " + lesson);
-        System.out.println("Client Lessons Size: " + lesson.getClientLessons().size());
-
         try {
             Lesson savedLesson = lessonService.save(lesson);
             return ResponseEntity.ok(savedLesson);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PostMapping("/subscriptions")
+    public ResponseEntity<Map<String, String>> createSubscription(@RequestBody SubscriptionRequest subscriptionRequest) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            lessonService.createSubscription(
+                    subscriptionRequest.getClients(),
+                    subscriptionRequest.getDays(),
+                    subscriptionRequest.getTotalWeeks(),
+                    subscriptionRequest.getStartDate()
+            );
+            response.put("message", "Subscription created successfully");
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            response.put("message", e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.put("message", "Error creating subscription");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
     }
 
@@ -82,15 +100,8 @@ public class LessonController {
 
                         // If the previous workday has no more lessons, delete it
                         if (previousWorkday.getLessons().isEmpty()) {
-                            System.out.println("I AM DELETING THE EMPTY WORKDAY");
                             workdayService.deleteById(previousWorkday.getId());
                         }
-                        else {
-                            System.out.println("SORRY BRO, EMPTY BUT NOT DELETED: " + previousWorkday.getLessons());
-                        }
-                    }
-                    else {
-                        System.out.println("WHAT DO YOU MEAN DUDE");
                     }
 
                     return ResponseEntity.ok().body(updatedLesson);

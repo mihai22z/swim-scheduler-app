@@ -32,7 +32,7 @@
       <ng-container matColumnDef="subscriptionStartDate">
         <th mat-header-cell *matHeaderCellDef>Sub Start Date</th>
         <td mat-cell *matCellDef="let client">
-          {{ client.subscriptionStartDate }}
+          {{ client.subscriptionStartDate | date : "EEEE, MMMM d, y" }}
         </td>
       </ng-container>
 
