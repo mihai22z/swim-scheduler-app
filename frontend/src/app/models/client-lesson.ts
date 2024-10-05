@@ -8,4 +8,5 @@ export interface ClientLesson {
   };
   client?: Client;
   lesson?: Lesson;
+  attendanceStatus?: 'ATTENDED' | 'ABSENT' | 'PENDING';
 }

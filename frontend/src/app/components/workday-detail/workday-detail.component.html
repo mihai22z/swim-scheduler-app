@@ -28,6 +28,28 @@
               <p matLine *ngIf="client.notes">
                 {{ client.notes }}
               </p>
+
+              <mat-radio-group
+                [(ngModel)]="attendanceStatuses[lesson.id!][client.id!]"
+                (change)="markAttendance(lesson.id!, client.id!)"
+              >
+                <mat-radio-button
+                  [value]="'ATTENDED'"
+                  [disabled]="
+                    attendanceStatuses[lesson.id!][client.id!] !== 'PENDING'
+                  "
+                >
+                  Attended
+                </mat-radio-button>
+                <mat-radio-button
+                  [value]="'ABSENT'"
+                  [disabled]="
+                    attendanceStatuses[lesson.id!][client.id!] !== 'PENDING'
+                  "
+                >
+                  Absent
+                </mat-radio-button>
+              </mat-radio-group>
             </mat-list-item>
           </mat-list>
 

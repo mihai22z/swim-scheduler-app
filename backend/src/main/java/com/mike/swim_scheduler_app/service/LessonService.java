@@ -88,6 +88,8 @@ public class LessonService {
 
         int checkedLessons = 0;
         int week = 0;
+        LocalDate firstLessonDate = null;
+
         while (checkedLessons < totalLessons) {
             for (DayTime dayTime : days) {
                 if (checkedLessons == totalLessons) {
@@ -102,6 +104,9 @@ public class LessonService {
                     continue;
                 }
                 else {
+                    if (firstLessonDate == null) {
+                        firstLessonDate = lessonDate;
+                    }
                     checkedLessons++;
                 }
 
@@ -117,7 +122,9 @@ public class LessonService {
         for (Client client : clients) {
             client.setSubscriptionTotalLessons(client.getSubscriptionTotalLessons() + totalLessons);
             client.setRemainingLessons(client.getRemainingLessons() + totalLessons);
-            client.setSubscriptionStartDate(startDate);
+            if (firstLessonDate != null) {
+                client.setSubscriptionStartDate(firstLessonDate);
+            }
             clientService.save(client);
         }
 
@@ -179,6 +186,41 @@ public class LessonService {
             });
         }
         return false;
+    }
+
+    public void markClientAttendance(Long clientId, Long lessonId, AttendanceStatus status) {
+        ClientLesson clientLesson = clientLessonService.findClientLessonById(new ClientLessonId(clientId, lessonId))
+                .orElseThrow(() -> new IllegalArgumentException("ClientLesson not found."));
+        clientLesson.setAttendanceStatus(status);
+
+        // Update the client's remaining lessons only if they attended
+        if (status == AttendanceStatus.ATTENDED) {
+            Client client = clientLesson.getClient();
+            // If client was on their last lesson, remove subscription
+            if (client.getRemainingLessons() == 1) {
+                client.setSubscriptionTotalLessons(0);
+                client.setSubscriptionStartDate(null);
+            }
+            if (client.getRemainingLessons() > 0) {
+                client.setRemainingLessons(client.getRemainingLessons() - 1);
+            }
+        }
+
+        // Check if all clients for this lesson have been marked
+        checkAndCompleteLesson(clientLesson.getLesson());
+
+        clientLessonService.saveClientLesson(clientLesson);
+    }
+
+    public void checkAndCompleteLesson(Lesson lesson) {
+        Set<ClientLesson> clientLessons = lesson.getClientLessons();
+
+        boolean allClientsChecked = clientLessons.stream()
+                .allMatch(clientLesson -> clientLesson.getAttendanceStatus() != AttendanceStatus.PENDING);
+
+        if (allClientsChecked) {
+            deleteById(lesson.getId());
+        }
     }
 
     public void deleteById(Long id) {

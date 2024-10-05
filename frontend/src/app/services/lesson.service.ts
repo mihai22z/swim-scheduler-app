@@ -36,6 +36,14 @@ export class LessonService {
     return this.http.put<Lesson>(`${API_URL}/${id}`, lesson);
   }
 
+  updateAttendance(attendanceData: {
+    clientId: number;
+    lessonId: number;
+    attendanceStatus: string;
+  }): Observable<any> {
+    return this.http.put(`${API_URL}/updateAttendance`, attendanceData);
+  }
+
   createLesson(lesson: Lesson): Observable<Lesson> {
     return this.http.post<Lesson>(API_URL, lesson);
   }

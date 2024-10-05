@@ -23,6 +23,9 @@ public class ClientLesson implements Serializable {
     @JsonIgnore
     private Lesson lesson;
 
+    @Enumerated(EnumType.STRING)
+    private AttendanceStatus attendanceStatus = AttendanceStatus.PENDING;
+
     public ClientLesson() {}
 
     public ClientLesson(ClientLessonId id, Client client, Lesson lesson) {
@@ -53,5 +56,13 @@ public class ClientLesson implements Serializable {
 
     public void setLesson(Lesson lesson) {
         this.lesson = lesson;
+    }
+
+    public AttendanceStatus getAttendanceStatus() {
+        return attendanceStatus;
+    }
+
+    public void setAttendanceStatus(AttendanceStatus attendanceStatus) {
+        this.attendanceStatus = attendanceStatus;
     }
 }

@@ -109,6 +109,20 @@ public class LessonController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @PutMapping("/updateAttendance")
+    public ResponseEntity<Map<String, String>> updateAttendance(@RequestBody AttendanceUpdateRequest request) {
+        Map<String, String> response = new HashMap<>();
+        try {
+            lessonService.markClientAttendance(request.getClientId(), request.getLessonId(), request.getAttendanceStatus());
+            response.put("message", "Attendance updated successfully.");
+            return ResponseEntity.ok(response);
+        }
+        catch (Exception e) {
+            response.put("message", "Error updating attendance: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteLesson(@PathVariable Long id) {
         return lessonService.findById(id)
